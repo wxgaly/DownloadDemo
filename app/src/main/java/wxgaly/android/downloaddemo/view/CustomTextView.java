@@ -1,4 +1,4 @@
-package wxgaly.android.downloaddemo;
+package wxgaly.android.downloaddemo.view;
 
 import android.content.Context;
 import android.graphics.*;
