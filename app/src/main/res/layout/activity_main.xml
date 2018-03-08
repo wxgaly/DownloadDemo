@@ -6,8 +6,8 @@
         android:layout_height="match_parent"
         android:background="@android:color/black">
 
-    <wxgaly.android.downloaddemo.view.CustomTextView
-            android:layout_width="500dp"
+    <wxgaly.android.downloaddemo.view.ColorfulSurfaceView
+            android:layout_width="300dp"
             android:layout_height="200dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

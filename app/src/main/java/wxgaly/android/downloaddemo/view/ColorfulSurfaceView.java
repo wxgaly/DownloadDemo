@@ -31,10 +31,12 @@ import nova.android.wxgaly.downloaddemo.R;
 public class ColorfulSurfaceView extends SurfaceView {
 
     private static final String TEXT = "欢迎使用诺瓦产品！";
-    private static final int[] colors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.GRAY, Color.CYAN, Color
+    private static final int[] colors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.GRAY,
+            Color.CYAN, Color
             .WHITE, Color.YELLOW, Color.BLACK};
-    private static final int TEXT_SIZE = 40;
-    private static final int EDGE_WIDTH = 40;
+    private static final int TEXT_SIZE = 100;
+    private static final int EDGE_WIDTH = 100;
+    private static final int STEP = 2;
 
     private Paint mPaint;
     private Shader shader;
@@ -54,9 +56,10 @@ public class ColorfulSurfaceView extends SurfaceView {
     private ColorfulCallback colorfulCallback;
     private ColorfulDrawThread colorfulDrawThread;
     private boolean isDraw = false;
-    private boolean isColorful = false;
+    private boolean isColorful = true;
     private boolean isBitmap = false;
     private boolean isEdge = true;
+    private boolean isDrawed = false;
 
     public ColorfulSurfaceView(Context context) {
         super(context);
@@ -86,7 +89,8 @@ public class ColorfulSurfaceView extends SurfaceView {
         paint.setTextSize(TEXT_SIZE);
         paint.setSubpixelText(true);
         measureText = mPaint.measureText(TEXT);
-        linearGradient = new LinearGradient(0, 0, measureText, measureText, colors, null, Shader.TileMode.REPEAT);
+        linearGradient = new LinearGradient(0, 0, measureText, measureText, colors, null, Shader
+                .TileMode.REPEAT);
 
         shader = linearGradient;
 
@@ -95,7 +99,8 @@ public class ColorfulSurfaceView extends SurfaceView {
         }
 
         if (isBitmap) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap
+                    .ic_launcher_round);
             bitmapShader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
             shader = bitmapShader;
             paint.setShader(shader);
@@ -155,7 +160,7 @@ public class ColorfulSurfaceView extends SurfaceView {
 
                 getHolder().unlockCanvasAndPost(canvas);
 
-                x -= 1;
+                x -= STEP;
                 if (x <= -measureText) {
                     x = getWidth();
                 }
@@ -182,11 +187,13 @@ public class ColorfulSurfaceView extends SurfaceView {
 
         canvas.drawRect(0, 0, EDGE_WIDTH, getMeasuredHeight(), paint);
 
-        shader = new LinearGradient(getMeasuredWidth() - EDGE_WIDTH, 0, getMeasuredWidth(), 1, colors[7] &
-                0x00FFFFFF, colors[7] | 0xFF000000, Shader.TileMode.CLAMP);
+        shader = new LinearGradient(getMeasuredWidth() - EDGE_WIDTH, 0, getMeasuredWidth(), 1,
+                colors[7] &
+                        0x00FFFFFF, colors[7] | 0xFF000000, Shader.TileMode.CLAMP);
 
         paint.setShader(shader);
-        canvas.drawRect(getMeasuredWidth() - EDGE_WIDTH, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
+        canvas.drawRect(getMeasuredWidth() - EDGE_WIDTH, 0, getMeasuredWidth(), getMeasuredHeight
+                (), paint);
 
     }
 
@@ -196,7 +203,8 @@ public class ColorfulSurfaceView extends SurfaceView {
         Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
         int baseLine = (int) ((getHeight() - fontMetrics.bottom - fontMetrics.top) / 2);
 
-//        canvas.drawRect(new Rect(0, 0, (int) measureText, (int) (fontMetrics.bottom - fontMetrics.top)), mPaint);
+//        canvas.drawRect(new Rect(0, 0, (int) measureText, (int) (fontMetrics.bottom -
+// fontMetrics.top)), mPaint);
         mPaint.setColor(Color.RED);
 //        if (x % 2 == 0) {
 //
@@ -208,7 +216,13 @@ public class ColorfulSurfaceView extends SurfaceView {
         //悬浮
 //        canvas.drawText(TEXT, x + 2, baseLine + 2, getSuspendedPaint());
 
-        canvas.drawText(TEXT, x, baseLine, mPaint);
+//        if (!isDrawed) {
+
+            canvas.drawText(TEXT, x, baseLine, mPaint);
+//        } else {
+//            isDrawed = true;
+//            canvas.translate(x, baseLine);
+//        }
 
         //套色
 //        canvas.drawText(TEXT, x, baseLine, getStrokePaint());
