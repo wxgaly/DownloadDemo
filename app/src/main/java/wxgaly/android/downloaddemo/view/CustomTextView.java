@@ -3,8 +3,11 @@ package wxgaly.android.downloaddemo.view;
 import android.content.Context;
 import android.graphics.*;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+
+import java.util.regex.Pattern;
 
 /**
  * nova.android.downloaddemo.
@@ -15,13 +18,25 @@ import android.util.Log;
 
 public class CustomTextView extends android.support.v7.widget.AppCompatTextView {
 
-    public static final String CUSTOM_FONT_XINWEI = "/sdcard/nova/viplex_terminal/font/STXINWEI.TTF";
+    public static final String CUSTOM_FONT_XINWEI = "/sdcard/nova/viplex_terminal/font/STXINWEI" +
+            ".TTF";
     public static final String CUSTOM_FONT_XIHEI = "/sdcard/nova/viplex_terminal/font/STXIHEI.TTF";
     private static final String TAG = "wxg";
     private static final String TEXT = "请输入文字！";
+    private static final int TEXT_SIZE = 96;
+    private static final String TEXT_INDIA = "请输入ஆனால் நான் உன்னை புரிந்து கொள்ள முடியவில்லை ";
     private static final char[] chars = TEXT.toCharArray();
-    private static final int[] colors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.GRAY, Color.CYAN, Color
+    private static final int[] colors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.GRAY,
+            Color.CYAN, Color
             .BLACK, Color.WHITE, Color.YELLOW};
+
+    private static final String SPACE_STR = " ";
+
+    /**
+     * 正则表达式，主要过滤支持的四种印度语，印地语、泰米尔语、泰卢固语以及卡纳达语。
+     */
+    private static final String REGEX_INDIA_LANGUAGE =
+            "[\\u0b80-\\u0bff\\u0c00-\\u0c7f\\u0900-\\u097f\\u0c80-\\u0cff]";
 
     private Paint mPaint;
     private Shader shader;
@@ -63,15 +78,17 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        paint.setColor(Color.BLACK);
+        paint.setColor(Color.RED);
         paint.setDither(true);
-        paint.setTextSize(96);
-        linearGradient = new LinearGradient(0, 0, getMeasuredWidth(), 0, colors, null, Shader.TileMode.MIRROR);
-//        radialGradient = new RadialGradient(getMeasuredWidth() / 2, getMeasuredHeight() / 2, 20f, colors, null, Shader.TileMode
+        paint.setTextSize(TEXT_SIZE);
+        linearGradient = new LinearGradient(0, 0, getMeasuredWidth(), 0, colors, null, Shader
+                .TileMode.MIRROR);
+//        radialGradient = new RadialGradient(getMeasuredWidth() / 2, getMeasuredHeight() / 2,
+// 20f, colors, null, Shader.TileMode
 //                .MIRROR);
 //        sweepGradient = new SweepGradient(0, 0, colors, null);
         shader = linearGradient;
-        paint.setShader(shader);
+//        paint.setShader(shader);
         matrix = new Matrix();
         paint.setShadowLayer(2, 5, 5, Color.BLACK);
         measureText = mPaint.measureText(TEXT);
@@ -94,29 +111,92 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 
 
         Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
-        Log.d(TAG, "ascent: " + fontMetrics.ascent);
-        Log.d(TAG, "descent: " + fontMetrics.descent);
+//        Log.d(TAG, "ascent: " + fontMetrics.ascent);
+//        Log.d(TAG, "descent: " + fontMetrics.descent);
         int baseLine = (int) ((getHeight() - fontMetrics.bottom - fontMetrics.top) / 2);
 
-//        canvas.drawRect(new Rect(0, 0, (int) measureText, (int) (fontMetrics.bottom - fontMetrics.top)), mPaint);
+//        canvas.drawRect(new Rect(0, 0, (int) measureText, (int) (fontMetrics.bottom -
+// fontMetrics.top)), mPaint);
 //        mPaint.setColor(Color.RED);
 
-        canvas.drawText(TEXT, x, baseLine, mPaint);
-        x -= 2;
-        if (x <= -measureText) {
-            x = getWidth();
-        }
+        drawIndiaText(canvas);
+
+//        canvas.drawText(TEXT, x, baseLine, mPaint);
+//        x -= 2;
+//        if (x <= -measureText) {
+//            x = getWidth();
+//        }
 //        for (int i = 0; i < chars.length; i++) {
 //            canvas.drawText(chars, i, 1, (measureText / chars.length) * i, baseLine, mPaint);
 //        }
 
         if (matrix != null) {
-            translateMatrix();
+//            translateMatrix();
 //            rotateMatrix();
             shader.setLocalMatrix(matrix); //渐变开始偏移
-            postInvalidateDelayed(16); //刷新间隔
+//            postInvalidateDelayed(16); //刷新间隔
         }
 
+    }
+
+    private void drawIndiaText(Canvas canvas) {
+        float textWidth = mPaint.measureText(TEXT_INDIA);
+        int start = 0;
+        int realCount = 1;
+        float realWidth = 0f;
+        int lineCount = 0;
+        int len = TEXT_INDIA.length();
+        Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
+//        int baseLine = (int) ((getHeight() - fontMetrics.bottom - fontMetrics.top) / 2);
+        int baseLine = (int) (fontMetrics.bottom - fontMetrics.top);
+
+        while ((start + realCount) <= len) {
+            realWidth = mPaint.measureText(TEXT_INDIA, start, start + realCount);
+
+            if (realWidth > getMeasuredWidth()) {
+
+                String str = TEXT_INDIA.substring(start + realCount - 1, start + realCount);
+                int tempRealCount = realCount;
+
+                while (!str.contains(SPACE_STR) && checkIsContainsIndia(str)) {
+                    realCount--;
+
+                    if (realCount == 0) {
+                        realCount = tempRealCount;
+                        break;
+                    }
+
+                    str = TEXT_INDIA.substring(start + realCount - 1, start + realCount);
+                }
+
+                canvas.drawText(TEXT_INDIA.substring(start, start + realCount), 0,
+                        baseLine + TEXT_SIZE * lineCount, mPaint);
+                Log.d(TAG, "drawIndiaText: " + TEXT_INDIA.substring(start, start + realCount));
+                lineCount++;
+                start = start + realCount;
+                realCount = 0;
+            }
+
+            realCount++;
+
+        }
+
+    }
+
+    /**
+     * @param str
+     * @return
+     */
+    private static boolean checkIsContainsIndia(String str) {
+        boolean res = false;
+
+        if (!TextUtils.isEmpty(str)) {
+            if (Pattern.compile(REGEX_INDIA_LANGUAGE).matcher(str).find()) {
+                res = true;
+            }
+        }
+
+        return res;
     }
 
 

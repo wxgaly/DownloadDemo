@@ -218,7 +218,7 @@ public class ColorfulSurfaceView extends SurfaceView {
 
 //        if (!isDrawed) {
 
-            canvas.drawText(TEXT, x, baseLine, mPaint);
+        canvas.drawText(TEXT, x, baseLine, mPaint);
 //        } else {
 //            isDrawed = true;
 //            canvas.translate(x, baseLine);
