@@ -1,7 +1,15 @@
 package wxgaly.android.downloaddemo.view;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
+import android.graphics.SweepGradient;
+import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -22,9 +30,10 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
             ".TTF";
     public static final String CUSTOM_FONT_XIHEI = "/sdcard/nova/viplex_terminal/font/STXIHEI.TTF";
     private static final String TAG = "wxg";
-    private static final String TEXT = "请输入文字！";
-    private static final int TEXT_SIZE = 96;
-    private static final String TEXT_INDIA = "请输入ஆனால் நான் உன்னை புரிந்து கொள்ள முடியவில்லை ";
+    private static final String TEXT = "请输入文字";
+    private static final int TEXT_SIZE = 50;
+    private static final String TEXT_INDIA = "请输入ஆனால் நான் hello world உன்னை புரிந்து கொள்ள முடியவில்லை దయచేసి " +
+            "టెక్స్ట్ని నమోదు చేయండి知道吗 कृपया पाठ दर्ज करे ದಯವಿಟ್ಟು ಪಠ್ಯವನ್ನು ನಮೂದಿಸಿ";
     private static final char[] chars = TEXT.toCharArray();
     private static final int[] colors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.GRAY,
             Color.CYAN, Color
@@ -163,18 +172,31 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 
                     if (realCount == 0) {
                         realCount = tempRealCount;
+                        while (!str.contains(SPACE_STR)) {
+                            if (start + realCount >= len) {
+                                break;
+                            }
+                            str = TEXT_INDIA.substring(start + realCount, start + realCount + 1);
+                            realCount++;
+                        }
                         break;
                     }
 
                     str = TEXT_INDIA.substring(start + realCount - 1, start + realCount);
                 }
 
-                canvas.drawText(TEXT_INDIA.substring(start, start + realCount), 0,
-                        baseLine + TEXT_SIZE * lineCount, mPaint);
-                Log.d(TAG, "drawIndiaText: " + TEXT_INDIA.substring(start, start + realCount));
-                lineCount++;
+                String drawText = TEXT_INDIA.substring(start, start + realCount);
+                if (!TextUtils.isEmpty(drawText.trim())) {
+                    canvas.drawText(drawText, 0, baseLine + TEXT_SIZE * lineCount, mPaint);
+//                Log.d(TAG, "drawIndiaText: " + TEXT_INDIA.substring(start, start + realCount) + "---realWidth : " +
+//                        realWidth);
+                    Log.d(TAG, "drawIndiaText: " + drawText.trim());
+                    lineCount++;
+                }
+
                 start = start + realCount;
                 realCount = 0;
+
             }
 
             realCount++;

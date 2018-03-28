@@ -1,22 +1,25 @@
 package wxgaly.android.downloaddemo.util;
 
 import android.util.Log;
-import wxgaly.android.downloaddemo.api.TerminalCloudCallRegulars;
-import wxgaly.android.downloaddemo.bean.DownloadTask;
-import wxgaly.android.downloaddemo.bean.FileInfo;
-import wxgaly.android.downloaddemo.bean.IDownloadCallback;
+
+import java.io.File;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import java.io.*;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import wxgaly.android.downloaddemo.api.TerminalCloudCallRegulars;
+import wxgaly.android.downloaddemo.bean.DownloadTask;
+import wxgaly.android.downloaddemo.bean.FileInfo;
+import wxgaly.android.downloaddemo.bean.IDownloadCallback;
 
 /**
  * nova.android.downloaddemo.
@@ -327,7 +330,7 @@ public class DownloadUtils {
                 long blockSize = endPosition - startPosition;
 
                 inputStream = body.byteStream();
-                randomAccessFile = new RandomAccessFile(downFile, "rw");
+                randomAccessFile = new RandomAccessFile(downFile, "rws");
 
                 randomAccessFile.seek(startPosition);
                 int len = 0;

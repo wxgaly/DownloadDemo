@@ -6,11 +6,11 @@
     android:background="@android:color/black">
 
     <wxgaly.android.downloaddemo.view.CustomTextView
-        android:layout_width="321dp"
-        android:layout_height="500dp"
+        android:layout_width="169dp"
+        android:layout_height="352dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <!--<wxgaly.android.downloaddemo.view.ColorfulSurfaceView
         android:layout_width="300dp"
