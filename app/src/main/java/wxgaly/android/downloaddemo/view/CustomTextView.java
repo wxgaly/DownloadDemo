@@ -34,6 +34,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     private static final int TEXT_SIZE = 50;
     private static final String TEXT_INDIA = "请输入ஆனால் நான் hello world உன்னை புரிந்து கொள்ள முடியவில்லை దయచేసి " +
             "టెక్స్ట్ని నమోదు చేయండి知道吗 कृपया पाठ दर्ज करे ದಯವಿಟ್ಟು ಪಠ್ಯವನ್ನು ನಮೂದಿಸಿ";
+    private static final String TEXT_ENGLISH = "This is my treasure, health is the first wealth in life.";
     private static final char[] chars = TEXT.toCharArray();
     private static final int[] colors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.GRAY,
             Color.CYAN, Color
@@ -46,6 +47,8 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
      */
     private static final String REGEX_INDIA_LANGUAGE =
             "[\\u0b80-\\u0bff\\u0c00-\\u0c7f\\u0900-\\u097f\\u0c80-\\u0cff]";
+
+    private static final String REGEX_ENGLISH_LANGUAGE = "[A-Za-z]";
 
     private Paint mPaint;
     private Shader shader;
@@ -149,25 +152,25 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     }
 
     private void drawIndiaText(Canvas canvas) {
-        float textWidth = mPaint.measureText(TEXT_INDIA);
+        float textWidth = mPaint.measureText(TEXT_ENGLISH);
         int start = 0;
         int realCount = 1;
         float realWidth = 0f;
         int lineCount = 0;
-        int len = TEXT_INDIA.length();
+        int len = TEXT_ENGLISH.length();
         Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
 //        int baseLine = (int) ((getHeight() - fontMetrics.bottom - fontMetrics.top) / 2);
         int baseLine = (int) (fontMetrics.bottom - fontMetrics.top);
 
         while ((start + realCount) <= len) {
-            realWidth = mPaint.measureText(TEXT_INDIA, start, start + realCount);
+            realWidth = mPaint.measureText(TEXT_ENGLISH, start, start + realCount);
 
             if (realWidth > getMeasuredWidth()) {
 
-                String str = TEXT_INDIA.substring(start + realCount - 1, start + realCount);
+                String str = TEXT_ENGLISH.substring(start + realCount - 1, start + realCount);
                 int tempRealCount = realCount;
 
-                while (!str.contains(SPACE_STR) && checkIsContainsIndia(str)) {
+                while (!str.contains(SPACE_STR) && (checkIsContainsIndia(str) || checkIsContainsEnglish(str))) {
                     realCount--;
 
                     if (realCount == 0) {
@@ -176,23 +179,23 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
                             if (start + realCount >= len) {
                                 break;
                             }
-                            str = TEXT_INDIA.substring(start + realCount, start + realCount + 1);
+                            str = TEXT_ENGLISH.substring(start + realCount, start + realCount + 1);
                             realCount++;
                         }
                         break;
                     }
 
-                    str = TEXT_INDIA.substring(start + realCount - 1, start + realCount);
+                    str = TEXT_ENGLISH.substring(start + realCount - 1, start + realCount);
                 }
 
-                String drawText = TEXT_INDIA.substring(start, start + realCount);
-                if (!TextUtils.isEmpty(drawText.trim())) {
+                String drawText = TEXT_ENGLISH.substring(start, start + realCount);
+//                if (!TextUtils.isEmpty(drawText.trim())) {
                     canvas.drawText(drawText, 0, baseLine + TEXT_SIZE * lineCount, mPaint);
 //                Log.d(TAG, "drawIndiaText: " + TEXT_INDIA.substring(start, start + realCount) + "---realWidth : " +
 //                        realWidth);
                     Log.d(TAG, "drawIndiaText: " + drawText.trim());
                     lineCount++;
-                }
+//                }
 
                 start = start + realCount;
                 realCount = 0;
@@ -221,6 +224,21 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
         return res;
     }
 
+    /**
+     * @param str
+     * @return
+     */
+    private static boolean checkIsContainsEnglish(String str) {
+        boolean res = false;
+
+        if (!TextUtils.isEmpty(str)) {
+            if (Pattern.compile(REGEX_ENGLISH_LANGUAGE).matcher(str).find()) {
+                res = true;
+            }
+        }
+
+        return res;
+    }
 
     private void rotateMatrix() {
         if (mDegrees <= 0) {
