@@ -6,7 +6,7 @@
     android:background="@android:color/black">
 
     <wxgaly.android.downloaddemo.view.CustomTextView
-        android:layout_width="169dp"
+        android:layout_width="265dp"
         android:layout_height="352dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

@@ -29,12 +29,14 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     public static final String CUSTOM_FONT_XINWEI = "/sdcard/nova/viplex_terminal/font/STXINWEI" +
             ".TTF";
     public static final String CUSTOM_FONT_XIHEI = "/sdcard/nova/viplex_terminal/font/STXIHEI.TTF";
+    public static final String CUSTOM_FONT_KRUTI = "/sdcard/nova/viplex_terminal/font/Kruti_Dev.ttf";
     private static final String TAG = "wxg";
     private static final String TEXT = "请输入文字";
-    private static final int TEXT_SIZE = 50;
+    private static final int TEXT_SIZE = 60;
     private static final String TEXT_INDIA = "请输入ஆனால் நான் hello world உன்னை புரிந்து கொள்ள முடியவில்லை దయచేసి " +
             "టెక్స్ట్ని నమోదు చేయండి知道吗 कृपया पाठ दर्ज करे ದಯವಿಟ್ಟು ಪಠ್ಯವನ್ನು ನಮೂದಿಸಿ";
     private static final String TEXT_ENGLISH = "This is my treasure, health is the first wealth in life.";
+    private static final String TEXT_YINDI = "कृपया पाठ दर्ज करेंऐसा करने के लिए कई चीजें होंगी.";
     private static final char[] chars = TEXT.toCharArray();
     private static final int[] colors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.GRAY,
             Color.CYAN, Color
@@ -85,7 +87,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     private void initPaint() {
         Paint paint = mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         try {
-            Typeface typeface = Typeface.createFromFile(CUSTOM_FONT_XIHEI);
+            Typeface typeface = Typeface.createFromFile(CUSTOM_FONT_KRUTI);
             paint.setTypeface(typeface);
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,22 +154,24 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     }
 
     private void drawIndiaText(Canvas canvas) {
-        float textWidth = mPaint.measureText(TEXT_ENGLISH);
+        float textWidth = mPaint.measureText(TEXT_YINDI);
         int start = 0;
         int realCount = 1;
         float realWidth = 0f;
         int lineCount = 0;
-        int len = TEXT_ENGLISH.length();
+        int len = TEXT_YINDI.length();
         Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
+        Log.d(TAG, "drawIndiaText: " + (fontMetrics.bottom - fontMetrics.top));
 //        int baseLine = (int) ((getHeight() - fontMetrics.bottom - fontMetrics.top) / 2);
-        int baseLine = (int) (fontMetrics.bottom - fontMetrics.top);
+        float baseLine = (fontMetrics.bottom - fontMetrics.top - fontMetrics.bottom - fontMetrics.top) / 2;
+        Log.d(TAG, "baseLine: " + baseLine);
 
         while ((start + realCount) <= len) {
-            realWidth = mPaint.measureText(TEXT_ENGLISH, start, start + realCount);
+            realWidth = mPaint.measureText(TEXT_YINDI, start, start + realCount);
 
             if (realWidth > getMeasuredWidth()) {
 
-                String str = TEXT_ENGLISH.substring(start + realCount - 1, start + realCount);
+                String str = TEXT_YINDI.substring(start + realCount - 1, start + realCount);
                 int tempRealCount = realCount;
 
                 while (!str.contains(SPACE_STR) && (checkIsContainsIndia(str) || checkIsContainsEnglish(str))) {
@@ -179,22 +183,22 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
                             if (start + realCount >= len) {
                                 break;
                             }
-                            str = TEXT_ENGLISH.substring(start + realCount, start + realCount + 1);
+                            str = TEXT_YINDI.substring(start + realCount, start + realCount + 1);
                             realCount++;
                         }
                         break;
                     }
 
-                    str = TEXT_ENGLISH.substring(start + realCount - 1, start + realCount);
+                    str = TEXT_YINDI.substring(start + realCount - 1, start + realCount);
                 }
 
-                String drawText = TEXT_ENGLISH.substring(start, start + realCount);
+                String drawText = TEXT_YINDI.substring(start, start + realCount);
 //                if (!TextUtils.isEmpty(drawText.trim())) {
-                    canvas.drawText(drawText, 0, baseLine + TEXT_SIZE * lineCount, mPaint);
+                canvas.drawText(drawText, 0, baseLine + TEXT_SIZE * lineCount, mPaint);
 //                Log.d(TAG, "drawIndiaText: " + TEXT_INDIA.substring(start, start + realCount) + "---realWidth : " +
 //                        realWidth);
-                    Log.d(TAG, "drawIndiaText: " + drawText.trim());
-                    lineCount++;
+                Log.d(TAG, "drawIndiaText: " + drawText.trim());
+                lineCount++;
 //                }
 
                 start = start + realCount;
