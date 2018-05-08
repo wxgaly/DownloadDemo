@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DifferentDisplayDemo</string>
+    <string name="action_settings">Settings</string>
+    <string name="text_show_dialog">显示一个对话框</string>
+    <string name="text_first_display">这是第一个屏</string>
+    <string name="text_show_second">显示第二屏</string>
+</resources>
