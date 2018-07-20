@@ -1,1 +1,1 @@
-include ':app', ':constraintdemo', ':androidtester'
+include ':app', ':constraintdemo', ':androidtester', ':notificationdemo'

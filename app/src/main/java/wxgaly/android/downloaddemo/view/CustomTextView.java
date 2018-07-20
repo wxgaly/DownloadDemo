@@ -30,8 +30,9 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     public static final String CUSTOM_FONT_XINWEI = "/sdcard/nova/viplex_terminal/font/STXINWEI.TTF";
     public static final String CUSTOM_FONT_XIHEI = "/sdcard/nova/viplex_terminal/font/STXIHEI.TTF";
     public static final String CUSTOM_FONT_KRUTI = "/sdcard/nova/viplex_terminal/font/Kruti_Dev.ttf";
+    public static final String CUSTOM_FONT_WXG = "/sdcard/nova/viplex_terminal/font/wxgyh.TTF";
     private static final String TAG = "wxg";
-    private static final String TEXT = "请输入文字";
+    private static final String TEXT = "丁  请输入文字";
     private static final int TEXT_SIZE = 90;
     private static final String TEXT_INDIA = "请输入ஆனால் நான் hello world உன்னை புரிந்து கொள்ள முடியவில்லை దయచేసి " +
             "టెక్స్ట్ని నమోదు చేయండి知道吗 कृपया पाठ दर्ज करे ದಯವಿಟ್ಟು ಪಠ್ಯವನ್ನು ನಮೂದಿಸಿ";
@@ -87,7 +88,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     private void initPaint() {
         Paint paint = mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         try {
-            Typeface typeface = Typeface.createFromFile(CUSTOM_FONT_XIHEI);
+            Typeface typeface = Typeface.createFromFile(CUSTOM_FONT_WXG);
             paint.setTypeface(typeface);
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,7 +136,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 // fontMetrics.top)), mPaint);
 //        mPaint.setColor(Color.RED);
 
-        drawLineText(canvas, "my life");
+        drawLineText(canvas, TEXT);
 //        drawIndiaText(canvas, TEXT);
 
 //        canvas.drawText(TEXT, x, baseLine, mPaint);

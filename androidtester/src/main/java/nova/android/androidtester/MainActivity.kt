@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,9 +15,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         btn.setOnClickListener {
-            Toast.makeText(this@MainActivity, editText.text, Toast.LENGTH_SHORT).show()
+
+            Toast.makeText(this@MainActivity,  "${editText.text}---${add(1, 2)}", Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun add(a: Int, b: Int): Int = a + b
 
 }

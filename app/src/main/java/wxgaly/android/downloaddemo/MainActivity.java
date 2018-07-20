@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String CUSTOM_FONT_STSONG = "/sdcard/nova/viplex_terminal/font/STSONG.TTF";
     public static final String CUSTOM_FONT_STKAITI = "/sdcard/nova/viplex_terminal/font/STKAITI.TTF";
     public static final String CUSTOM_FONT_STLITI = "/sdcard/nova/viplex_terminal/font/STLITI.TTF";
+    public static final String CUSTOM_FONT_WXG = "/sdcard/nova/viplex_terminal/font/wxgyh.TTF";
 
     public static final String CUSTOM_FONT_MICROSOFT_YAHEI = "Microsoft YaHei";
     public static final String CUSTOM_FONT_SONGTI = "SimSun";
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        testDownload();
 //        testFontHeight();
-        testShell();
+//        testShell();
 
     }
 
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
     private void initPaint(int textSize) {
         Paint paint = new Paint();
         try {
-            Typeface typeface = Typeface.createFromFile(CUSTOM_FONT_XIHEI);
+            Typeface typeface = Typeface.createFromFile(CUSTOM_FONT_WXG);
 //            Typeface typeface = Typeface.create(CUSTOM_FONT_KAITI, Typeface.NORMAL);
 
             paint.setTypeface(typeface);

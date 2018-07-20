@@ -1,11 +1,12 @@
 package nova.android.androidtester;
 
-import android.support.test.InstrumentationRegistry;
+import android.support.test.filters.SmallTest;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -17,19 +18,23 @@ import org.junit.runner.RunWith;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class ActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+@SmallTest
+public class ActivityTest {
 
-    public ActivityTest(String pkg, Class<MainActivity> activityClass) {
-        super(pkg, activityClass);
+
+    public ActivityTest() {
     }
+
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
 
         // Injecting the Instrumentation instance is required
         // for your test to run with AndroidJUnitRunner.
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+//        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
 //        mActivity = getActivity();
     }
 
@@ -41,7 +46,7 @@ public class ActivityTest extends ActivityInstrumentationTestCase2<MainActivity>
 
     @After
     public void tearDown() throws Exception {
-        super.tearDown();
+//        super.tearDown();
     }
 
 }
