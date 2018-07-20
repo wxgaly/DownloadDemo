@@ -29,10 +29,10 @@
 
     </application>
 
-    <instrumentation
+   <!-- <instrumentation
         android:handleProfiling="true"
         android:label="CoverageInstrumentation"
         android:name="nova.android.androidtester.test.JacocoInstrumentation"
-        android:targetPackage="nova.android.androidtester"/>
+        android:targetPackage="nova.android.androidtester"/>-->
 
 </manifest>
