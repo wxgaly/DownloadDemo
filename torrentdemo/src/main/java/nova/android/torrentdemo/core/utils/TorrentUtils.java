@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import nova.android.torrentdemo.core.exceptions.FileAlreadyExistsException;
 import nova.android.torrentdemo.core.storage.TorrentStorage;
 
 public class TorrentUtils
@@ -86,8 +85,8 @@ public class TorrentUtils
             throw new IOException("Unable to create dir");
 
         /* The same file */
-        if (new File(dataDir, TorrentStorage.Model.DATA_TORRENT_FILE_NAME).exists())
-            throw new FileAlreadyExistsException();
+//        if (new File(dataDir, TorrentStorage.Model.DATA_TORRENT_FILE_NAME).exists())
+//            throw new FileAlreadyExistsException();
         File torrent = new File(dataDir, TorrentStorage.Model.DATA_TORRENT_FILE_NAME);
         /* We are sure that one of them is not null */
         if (pathToTorrent != null)
