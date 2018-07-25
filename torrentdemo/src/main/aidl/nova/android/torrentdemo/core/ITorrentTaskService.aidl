@@ -9,4 +9,6 @@ interface ITorrentTaskService {
     void addTorrentByFilePath(String filePath);
 
     void addTorrent(in AddTorrentParams params, boolean removeFile);
+
+    void pause();
 }

@@ -46,6 +46,17 @@ class TorrentTaskService : Service(), TorrentEngineCallback {
     override fun onTorrentStateChanged(id: String?) {
         Log.d(TAG, "onTorrentStateChanged ---- $id")
         sendBasicState(TorrentEngine.getInstance().getTask(id))
+        val peerStatesList = iTorrentTaskServiceImpl.getPeerStatesList(id)
+        val trackerStatesList = iTorrentTaskServiceImpl.getTrackerStatesList(id)
+
+//        peerStatesList?.forEach {
+//            Log.d(TAG, "peerStatesList : ------ $it")
+//        }
+
+//        trackerStatesList?.forEach {
+//            Log.d(TAG, "trackerStatesList: ------- $it")
+//        }
+
     }
 
     override fun onTorrentFinished(id: String?) {
@@ -95,6 +106,7 @@ class TorrentTaskService : Service(), TorrentEngineCallback {
 
         val state = makeBasicStateParcel(task)
         Log.d(TAG, state.toString())
+
     }
 
     private fun makeBasicStateParcel(task: TorrentDownload?): BasicStateParcel? {

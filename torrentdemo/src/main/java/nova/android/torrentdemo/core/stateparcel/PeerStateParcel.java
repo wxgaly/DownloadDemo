@@ -36,8 +36,7 @@ import java.nio.charset.StandardCharsets;
  * about the state of the peer, sent from the service.
  */
 
-public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel>
-{
+public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel> {
     public String ip;
     public String client;
     public long totalDownload;
@@ -49,15 +48,13 @@ public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel>
     public int payloadDownSpeed;
     public int payloadUpSpeed;
 
-    public class ConnectionType
-    {
+    public class ConnectionType {
         public static final int BITTORRENT = 0;
         public static final int WEB = 1;
         public static final int UTP = 2;
     }
 
-    public PeerStateParcel(peer_info peer, TorrentStatus torrentStatus)
-    {
+    public PeerStateParcel(peer_info peer, TorrentStatus torrentStatus) {
         super(new Address(peer.getIp().address()).toString());
 
         ip = new Address(peer.getIp().address()).toString();
@@ -81,8 +78,7 @@ public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel>
                            long totalDownload, long totalUpload,
                            double relevance, int connectionType,
                            int port, int progress,
-                           int payloadDownSpeed, int payloadUpSpeed)
-    {
+                           int payloadDownSpeed, int payloadUpSpeed) {
         super(ip);
 
         this.ip = ip;
@@ -97,8 +93,7 @@ public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel>
         this.payloadUpSpeed = payloadUpSpeed;
     }
 
-    public PeerStateParcel(Parcel source)
-    {
+    public PeerStateParcel(Parcel source) {
         super(source);
 
         ip = source.readString();
@@ -113,8 +108,7 @@ public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel>
         payloadUpSpeed = source.readInt();
     }
 
-    private int getConnectionType(peer_info peer)
-    {
+    private int getConnectionType(peer_info peer) {
         if (peer.getFlags().and_(peer_info.utp_socket).nonZero()) {
             return ConnectionType.UTP;
         }
@@ -131,8 +125,7 @@ public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel>
         return connection;
     }
 
-    private double calcRelevance(peer_info peer, TorrentStatus torrentStatus)
-    {
+    private double calcRelevance(peer_info peer, TorrentStatus torrentStatus) {
         double relevance = 0.0;
         piece_index_bitfield allPieces = torrentStatus.pieces().swig();
         piece_index_bitfield peerPieces = peer.getPieces();
@@ -155,14 +148,12 @@ public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel>
     }
 
     @Override
-    public int describeContents()
-    {
+    public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags)
-    {
+    public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
 
         dest.writeString(ip);
@@ -178,30 +169,25 @@ public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel>
     }
 
     public static final Creator<PeerStateParcel> CREATOR =
-            new Creator<PeerStateParcel>()
-            {
+            new Creator<PeerStateParcel>() {
                 @Override
-                public PeerStateParcel createFromParcel(Parcel source)
-                {
+                public PeerStateParcel createFromParcel(Parcel source) {
                     return new PeerStateParcel(source);
                 }
 
                 @Override
-                public PeerStateParcel[] newArray(int size)
-                {
+                public PeerStateParcel[] newArray(int size) {
                     return new PeerStateParcel[size];
                 }
             };
 
     @Override
-    public int compareTo(PeerStateParcel another)
-    {
+    public int compareTo(PeerStateParcel another) {
         return ip.compareTo(another.ip);
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int prime = 31, result = 1;
 
         result = prime * result + ((ip == null) ? 0 : ip.hashCode());
@@ -220,8 +206,7 @@ public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel>
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (!(o instanceof PeerStateParcel)) {
             return false;
         }
@@ -245,8 +230,7 @@ public class PeerStateParcel extends AbstractStateParcel<PeerStateParcel>
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "PeerStateParcel{" +
                 "ip='" + ip + '\'' +
                 ", client='" + client + '\'' +

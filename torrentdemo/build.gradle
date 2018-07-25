@@ -26,7 +26,7 @@ android {
 
 }
 
-def JLIBTORRENT_VERSION='1.2.0.16'
+def JLIBTORRENT_VERSION='1.2.0.17'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

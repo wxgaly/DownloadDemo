@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        iTorrentTaskService?.pause()
         unbindService(serviceConnection)
     }
 

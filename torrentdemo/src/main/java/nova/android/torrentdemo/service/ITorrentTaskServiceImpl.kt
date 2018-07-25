@@ -6,6 +6,8 @@ import android.util.Log
 import com.frostwire.jlibtorrent.Priority
 import com.frostwire.jlibtorrent.TorrentInfo
 import nova.android.torrentdemo.core.*
+import nova.android.torrentdemo.core.stateparcel.PeerStateParcel
+import nova.android.torrentdemo.core.stateparcel.TrackerStateParcel
 import nova.android.torrentdemo.core.storage.TorrentStorage
 import nova.android.torrentdemo.core.utils.FileIOUtils
 import nova.android.torrentdemo.core.utils.TorrentUtils
@@ -20,7 +22,7 @@ import java.util.*
  * @author Created by WXG on 2018/7/24 024 9:56.
  * @version V1.0
  */
-class ITorrentTaskServiceImpl(val context: Context, val callback: TorrentEngineCallback?) : ITorrentTaskService.Stub() {
+class ITorrentTaskServiceImpl(val context: Context, callback: TorrentEngineCallback?) : ITorrentTaskService.Stub() {
 
     private val TAG = "ITorrentTaskServiceImpl"
     private var repo: TorrentStorage = TorrentStorage(context)
@@ -126,11 +128,92 @@ class ITorrentTaskServiceImpl(val context: Context, val callback: TorrentEngineC
 
     }
 
+    override fun pause() {
+        TorrentEngine.getInstance().pause()
+    }
+
     private fun isAllFilesTooBig(downloadPath: String, ti: TorrentInfo): Boolean {
         val space = FileIOUtils.getFreeSpace(downloadPath)
         val total = ti.totalSize()
         Log.d(TAG, "space : $space --------  total : $total")
         return FileIOUtils.getFreeSpace(downloadPath) < ti.totalSize()
+    }
+
+    fun getPeerStatesList(id: String?): ArrayList<PeerStateParcel>? {
+        if (id == null)
+            return null
+
+        val task = TorrentEngine.getInstance().getTask(id) ?: return null
+
+        return makePeerStateParcelList(task)
+    }
+
+    fun getTrackerStatesList(id: String?): ArrayList<TrackerStateParcel>? {
+        if (id == null)
+            return null
+
+        val task = TorrentEngine.getInstance().getTask(id) ?: return null
+
+        return makeTrackerStateParcelList(task)
+    }
+
+    private fun makeTrackerStateParcelList(task: TorrentDownload?): ArrayList<TrackerStateParcel>? {
+        if (task == null)
+            return null
+
+        val trackers = task.trackers
+        val states = ArrayList<TrackerStateParcel>()
+
+        val statusDHT = if (TorrentEngine.getInstance().isDHTEnabled)
+            TrackerStateParcel.Status.WORKING
+        else
+            TrackerStateParcel.Status.NOT_WORKING
+
+        val statusLSD = if (TorrentEngine.getInstance().isLSDEnabled)
+            TrackerStateParcel.Status.WORKING
+        else
+            TrackerStateParcel.Status.NOT_WORKING
+
+        val statusPeX = if (TorrentEngine.getInstance().isPeXEnabled)
+            TrackerStateParcel.Status.WORKING
+        else
+            TrackerStateParcel.Status.NOT_WORKING
+
+        states.add(TrackerStateParcel(TrackerStateParcel.DHT_ENTRY_NAME, "", -1, statusDHT))
+        states.add(TrackerStateParcel(TrackerStateParcel.LSD_ENTRY_NAME, "", -1, statusLSD))
+        states.add(TrackerStateParcel(TrackerStateParcel.PEX_ENTRY_NAME, "", -1, statusPeX))
+
+        for (entry in trackers) {
+            val url = entry.url()
+            /* Prevent duplicate */
+            if (url == TrackerStateParcel.DHT_ENTRY_NAME ||
+                    url == TrackerStateParcel.LSD_ENTRY_NAME ||
+                    url == TrackerStateParcel.PEX_ENTRY_NAME) {
+                continue
+            }
+
+            states.add(TrackerStateParcel(entry.swig()))
+        }
+
+        return states
+    }
+
+    private fun makePeerStateParcelList(task: TorrentDownload?): ArrayList<PeerStateParcel>? {
+        if (task == null) {
+            return null
+        }
+
+        val states = ArrayList<PeerStateParcel>()
+        val peers = task.peers
+
+        val status = task.torrentStatus
+
+        for (peer in peers) {
+            val state = PeerStateParcel(peer.swig(), status)
+            states.add(state)
+        }
+
+        return states
     }
 
 }
