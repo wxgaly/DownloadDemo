@@ -2,7 +2,9 @@ package nova.android.slidingcarddemo.view
 
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.view.ViewCompat
+import android.util.Log
 import android.view.View
+import nova.android.slidingcarddemo.utils.TypeUtils
 
 /**
  *  nova.android.slidingcarddemo.view.
@@ -21,7 +23,7 @@ class SlidingCardBehavior : CoordinatorLayout.Behavior<SlidingCardLayout>() {
         val offset = getChildMeasureOffset(parent, child)
         val height = View.MeasureSpec.getSize(parentHeightMeasureSpec) - offset
         child.measure(parentWidthMeasureSpec, View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY))
-
+        Log.d(TAG, "The type of parent is ${TypeUtils.analysisClassInfo(this)}")
         return true
     }
 
