@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <android.support.v7.widget.CardView
+    <nova.android.slidingcarddemo.view.SlidingCardLayout
+        android:id="@+id/pane_one"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:colorBackground="#a55"
+        android:text="卡片1"
+        />
 
+    <nova.android.slidingcarddemo.view.SlidingCardLayout
+        android:id="@+id/pane_two"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:colorBackground="#5a5"
+        android:text="卡片2"
+        />
 
-</android.support.constraint.ConstraintLayout>
+    <nova.android.slidingcarddemo.view.SlidingCardLayout
+        android:id="@+id/pane_three"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:colorBackground="#55a"
+        android:text="卡片3"
+        />
+
+    <nova.android.slidingcarddemo.view.SlidingCardLayout
+        android:id="@+id/pane_four"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:colorBackground="#aa5"
+        android:text="卡片4"
+        />
+
+</android.support.design.widget.CoordinatorLayout>

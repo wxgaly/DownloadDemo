@@ -1,5 +1,6 @@
 package nova.android.slidingcarddemo.adapter
 
+import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -27,20 +28,20 @@ class RecyclerAdapter(recyclerView: RecyclerView) : RecyclerView.Adapter<Recycle
     init {
         inflater = LayoutInflater.from(recyclerView.context)
 
-//        recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-//
-//            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
-//                super.getItemOffsets(outRect, view, parent, state)
-//                val position = parent.getChildViewHolder(view).adapterPosition
-//                val offset = 10
-//
-//                outRect.set(offset, if (position == 0) {
-//                    offset
-//                } else {
-//                    0
-//                }, offset, offset)
-//            }
-//        })
+        recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
+
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
+                super.getItemOffsets(outRect, view, parent, state)
+                val position = parent.getChildViewHolder(view).adapterPosition
+                val offset = 20
+
+                outRect.set(offset, if (position == 0) {
+                    offset
+                } else {
+                    0
+                }, offset, offset - 10)
+            }
+        })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder {
@@ -51,7 +52,7 @@ class RecyclerAdapter(recyclerView: RecyclerView) : RecyclerView.Adapter<Recycle
     override fun getItemCount(): Int = ITEMS.size
 
     override fun onBindViewHolder(holder: RecyclerHolder, position: Int) {
-
+        holder.tv?.text = ITEMS[position]
     }
 
     inner class RecyclerHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
