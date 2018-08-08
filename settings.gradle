@@ -1,2 +1,2 @@
 //include ':app', ':constraintdemo', ':androidtester', ':notificationdemo', ':torrentdemo', ':slidingcarddemo'
-include ':slidingcarddemo'
+include ':wavedemo'
