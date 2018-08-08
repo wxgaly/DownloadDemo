@@ -86,6 +86,7 @@ class WaveView : View {
             mBitmap = getCircleBitmap(mBitmap!!)
         } else {
             mBitmap = BitmapFactory.decodeResource(resources, R.drawable.firefox, options)
+            mBitmap = getCircleBitmap(mBitmap!!)
         }
 
         paint = Paint()
@@ -122,17 +123,25 @@ class WaveView : View {
             Log.d(TAG, "width : $viewWidth, height : $viewHeight")
             bounds?.apply {
                 Log.d(TAG, "bounds : --- ${this} ")
-                if (top < waveOriginY) { // 从波峰滑落到基准线
-                    canvas.drawBitmap(mBitmap,
-                            right.toFloat() - mBitmap!!.width / 2,
-                            top.toFloat() - mBitmap!!.height,
-                            paint)
+                if (top > 0 || right > 0) {
+                    if (top < waveOriginY) { // 从波峰滑落到基准线
+                        canvas.drawBitmap(mBitmap,
+                                right.toFloat() - mBitmap!!.width / 2,
+                                top.toFloat() - mBitmap!!.height,
+                                paint)
+                    } else {
+                        canvas.drawBitmap(mBitmap,
+                                right.toFloat() - mBitmap!!.width / 2,
+                                bottom.toFloat() - mBitmap!!.height,
+                                paint)
+                    }
                 } else {
                     canvas.drawBitmap(mBitmap,
-                            right.toFloat() - mBitmap!!.width / 2,
-                            bottom.toFloat() - mBitmap!!.height,
+                            (viewWidth - mBitmap!!.width) / 2f,
+                            waveOriginY - mBitmap!!.height,
                             paint)
                 }
+
 
             }
         }
