@@ -50,11 +50,15 @@ class WaveView : View {
 
     private var mBitmap: Bitmap? = null
 
+    private var mSecondBitmap: Bitmap? = null
+
     private var viewWidth: Int = 0
 
     private var viewHeight: Int = 0
 
     private var region: Region? = null
+
+    private var secondRegion: Region? = null
 
     private var valueAnimator: ValueAnimator? = null
 
@@ -84,9 +88,12 @@ class WaveView : View {
         if (waveView_boatBitmap > 0) {
             mBitmap = BitmapFactory.decodeResource(resources, waveView_boatBitmap, options)
             mBitmap = getCircleBitmap(mBitmap!!)
+            mSecondBitmap = getCircleBitmap(BitmapFactory.decodeResource(resources, R.drawable.firefox, options))
+
         } else {
             mBitmap = BitmapFactory.decodeResource(resources, R.drawable.firefox, options)
             mBitmap = getCircleBitmap(mBitmap!!)
+            mSecondBitmap = getCircleBitmap(BitmapFactory.decodeResource(resources, R.mipmap.google, options))
         }
 
         paint = Paint()
@@ -120,6 +127,7 @@ class WaveView : View {
     private fun drawBitmap(canvas: Canvas) {
         mBitmap?.apply {
             val bounds = region?.bounds
+            val secondBounds = secondRegion?.bounds
             Log.d(TAG, "width : $viewWidth, height : $viewHeight")
             bounds?.apply {
                 Log.d(TAG, "bounds : --- ${this} ")
@@ -137,12 +145,32 @@ class WaveView : View {
                     }
                 } else {
                     canvas.drawBitmap(mBitmap,
-                            (viewWidth - mBitmap!!.width) / 2f,
+                            viewWidth / 3f - mBitmap!!.width / 2f,
                             waveOriginY - mBitmap!!.height,
                             paint)
                 }
+            }
 
-
+            secondBounds?.apply {
+                Log.d(TAG, "bounds : --- ${this} ")
+                if (top > 0 || right > 0) {
+                    if (top < waveOriginY) { // 从波峰滑落到基准线
+                        canvas.drawBitmap(mSecondBitmap,
+                                right.toFloat() - mSecondBitmap!!.width / 2,
+                                top.toFloat() - mSecondBitmap!!.height,
+                                paint)
+                    } else {
+                        canvas.drawBitmap(mSecondBitmap,
+                                right.toFloat() - mSecondBitmap!!.width / 2,
+                                bottom.toFloat() - mSecondBitmap!!.height,
+                                paint)
+                    }
+                } else {
+                    canvas.drawBitmap(mSecondBitmap,
+                            viewWidth * 2 / 3 - mSecondBitmap!!.width / 2f,
+                            waveOriginY - mSecondBitmap!!.height,
+                            paint)
+                }
             }
         }
     }
@@ -189,9 +217,14 @@ class WaveView : View {
             }
 
             region = Region()
-            val x = (viewWidth / 2).toFloat()
-            val clip = Region((x - 0.1).toInt(), 0, x.toInt(), height * 2)
+            var x = (viewWidth / 3).toFloat()
+            var clip = Region((x - 0.1).toInt(), 0, x.toInt(), height * 2)
             region?.setPath(path, clip)
+
+            secondRegion = Region()
+            x = (viewWidth * 2 / 3).toFloat()
+            clip = Region((x - 0.1).toInt(), 0, x.toInt(), height * 2)
+            secondRegion?.setPath(path, clip)
 
             lineTo(width.toFloat(), height.toFloat())
             lineTo(0f, height.toFloat())
