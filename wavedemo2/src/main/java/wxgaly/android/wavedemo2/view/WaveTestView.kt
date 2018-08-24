@@ -41,7 +41,7 @@ class WaveTestView : View {
     private var mAmplitude = 0 // 振幅
     private var mStartTime = System.currentTimeMillis() // 动画开始时间
 
-    private val mCrestAndCrossPints = Array(9) { _ -> Array(1) { 1 } }
+    private val mCrestAndCrossPints = Array(9) { _ -> Array(3) { 1f } }
     private val rectF = RectF()
     private val mXfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
     private val mBackgroudColor = Color.rgb(24, 33, 41)
@@ -61,7 +61,7 @@ class WaveTestView : View {
         mPaint.isAntiAlias = true // 抗锯齿
 
         for (i in 0 until 9) {
-            mCrestAndCrossPints[i] = arrayOf(2)
+            mCrestAndCrossPints[i] = Array(2) { 1f }
         }
     }
 
@@ -86,7 +86,7 @@ class WaveTestView : View {
     }
 
     private fun drawWave(canvas: Canvas) {
-        canvas.drawColor(Color.rgb(24, 33, 41))
+        canvas.drawColor(mBackgroudColor)
 
         mFirstPath.rewind()
         mSecondPath.rewind()
@@ -97,24 +97,71 @@ class WaveTestView : View {
         mSecondPath.moveTo(0f, mCenterHeight.toFloat())
         mCenterPath.moveTo(0f, mCenterHeight.toFloat())
 
-        val offset = (System.currentTimeMillis() - mStartTime) / 500f
+        val offset = (System.currentTimeMillis() - mStartTime) / 300f
 
         var x: Float
-        var curV: Float
+        var xy: Array<Float>
+
+        // 波形函数的值，包括上一点，当前点和下一点
+        var curV = 0f
+        var lastV = 0f
+
+        // 计算下一个采样点
+        var nextV = (mAmplitude * calculateMapY(mMapX!![0]!!, offset)).toFloat()
+
+        // 波形函数的绝对值，用于筛选波峰和交错点
+        var absLastV = 0f
+        var absCurV = 0f
+        var absNextV = 0f
+
+        // 上一个筛选出的点是波峰还是交错点
+        var lastIsCrest = false
+
+        // 筛选出的波峰和交叉点的数量，包括起点和终点
+        var crestAndCrossCount = 0
 
         for (i in 0..SAMPLINT_SIZE) {
 
+            //计算采样点的位置
             x = mSamplingX!![i]!!
-            curV = if (i < SAMPLINT_SIZE) {
-                (mAmplitude * calculateMapY(mMapX!![i]!!, offset)).toFloat()
+            lastV = curV
+            curV = nextV
+
+
+            nextV = if (i < SAMPLINT_SIZE) {
+                (mAmplitude * calculateMapY(mMapX!![i + 1]!!, offset)).toFloat()
             } else {
                 0f
             }
 
             mFirstPath.lineTo(x, mCenterHeight + curV)
             mSecondPath.lineTo(x, mCenterHeight - curV)
-            mCenterPath.lineTo(x, mCenterHeight + curV / 3)
+
+            // 中间线的振幅是上线两根线振幅的1/5
+            mCenterPath.lineTo(x, mCenterHeight + curV / 5F)
+
+            //记录极点值
+            absLastV = Math.abs(lastV)
+            absCurV = Math.abs(curV)
+            absNextV = Math.abs(nextV)
+
+            if (i == 0 || i == SAMPLINT_SIZE || (lastIsCrest && absCurV < absNextV && absCurV > absLastV)) {
+                xy = mCrestAndCrossPints[crestAndCrossCount++]
+                xy[0] = x
+                xy[1] = 0f
+                lastIsCrest = false
+            } else if (!lastIsCrest && absCurV > absLastV && absCurV > absNextV) {
+                xy = mCrestAndCrossPints[crestAndCrossCount++]
+                xy[0] = x
+                xy[1] = curV
+                lastIsCrest = true
+            }
+
         }
+
+        mFirstPath.lineTo(mWidth.toFloat(), mCenterHeight.toFloat())
+        mSecondPath.lineTo(mWidth.toFloat(), mCenterHeight.toFloat())
+        mCenterPath.lineTo(mWidth.toFloat(), mCenterHeight.toFloat())
 
         mPaint.style = Paint.Style.FILL
         mPaint.color = Color.WHITE
@@ -124,19 +171,33 @@ class WaveTestView : View {
         canvas.drawPath(mSecondPath, mPaint)
         canvas.drawPath(mCenterPath, mPaint)
 
+        //记录Layer
         val saveCount = canvas.saveLayer(0F, 0F, mWidth.toFloat(), mHeight.toFloat(), null, Canvas.ALL_SAVE_FLAG)
+
 
         // 下一个图层
         mPaint.style = Paint.Style.FILL
         mPaint.color = Color.BLUE
         mPaint.xfermode = mXfermode
 
-        mPaint.shader = LinearGradient(0F, (mCenterHeight - mAmplitude).toFloat(), mWidth.toFloat(),
-                (mCenterHeight + mAmplitude).toFloat(), Color.BLUE, Color.GREEN, Shader.TileMode.CLAMP)
+        var startX = 0f
+        var crestY = 0f
+        var endX = 0f
 
-        rectF.set(0F, (mCenterHeight - mAmplitude).toFloat(), mWidth.toFloat(), (mCenterHeight + mAmplitude).toFloat())
+        for (i in 2 until crestAndCrossCount step 2) {
 
-        canvas.drawRect(rectF, mPaint)
+            //每隔两个点绘制一个矩形
+            startX = mCrestAndCrossPints[i - 2][0]
+            crestY = mCrestAndCrossPints[i - 1][1]
+            endX = mCrestAndCrossPints[i][0]
+
+            mPaint.shader = LinearGradient(0F, (mCenterHeight - crestY), mWidth.toFloat(),
+                    (mCenterHeight + crestY), Color.BLUE, Color.GREEN, Shader.TileMode.CLAMP)
+
+            rectF.set(startX, (mCenterHeight - crestY), endX, (mCenterHeight + crestY))
+
+            canvas.drawRect(rectF, mPaint)
+        }
 
 
 //        mPaint.shader = null
@@ -150,9 +211,11 @@ class WaveTestView : View {
         mLinePaint.style = Paint.Style.STROKE
         mLinePaint.color = Color.BLUE
         mLinePaint.strokeWidth = 3f
-
         canvas.drawPath(mFirstPath, mLinePaint)
+
+        mLinePaint.color = Color.GREEN
         canvas.drawPath(mSecondPath, mLinePaint)
+
         mLinePaint.color = mCenterPathColor
         canvas.drawPath(mCenterPath, mLinePaint)
     }
