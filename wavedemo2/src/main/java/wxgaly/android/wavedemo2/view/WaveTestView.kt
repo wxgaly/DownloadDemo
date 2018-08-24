@@ -97,7 +97,7 @@ class WaveTestView : View {
         mSecondPath.moveTo(0f, mCenterHeight.toFloat())
         mCenterPath.moveTo(0f, mCenterHeight.toFloat())
 
-        val offset = (System.currentTimeMillis() - mStartTime) / 300f
+        val offset = (System.currentTimeMillis() - mStartTime) / 2000f
 
         var x: Float
         var xy: Array<Float>
@@ -191,10 +191,10 @@ class WaveTestView : View {
             crestY = mCrestAndCrossPints[i - 1][1]
             endX = mCrestAndCrossPints[i][0]
 
-            mPaint.shader = LinearGradient(0F, (mCenterHeight - crestY), mWidth.toFloat(),
-                    (mCenterHeight + crestY), Color.BLUE, Color.GREEN, Shader.TileMode.CLAMP)
+            mPaint.shader = LinearGradient(0F, (mCenterHeight + crestY), mWidth.toFloat(),
+                    (mCenterHeight - crestY), Color.BLUE, Color.GREEN, Shader.TileMode.CLAMP)
 
-            rectF.set(startX, (mCenterHeight - crestY), endX, (mCenterHeight + crestY))
+            rectF.set(startX, (mCenterHeight + crestY), endX, (mCenterHeight - crestY))
 
             canvas.drawRect(rectF, mPaint)
         }
