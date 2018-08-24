@@ -239,7 +239,7 @@ class WaveView : View {
 
         val cropBitmap = Bitmap.createBitmap(bitmap, (bitmap.width - cropWidth) / 2,
                 (bitmap.height - cropWidth) / 2, cropWidth, cropWidth)
-        return Bitmap.createScaledBitmap(cropBitmap, cropWidth / 2, cropWidth / 2, true)
+        return Bitmap.createScaledBitmap(cropBitmap, (cropWidth / 2.5).toInt(), (cropWidth / 2.5).toInt(), true)
     }
 
     private fun getCircleBitmap(bitmap: Bitmap): Bitmap? {//把图片裁剪成圆形

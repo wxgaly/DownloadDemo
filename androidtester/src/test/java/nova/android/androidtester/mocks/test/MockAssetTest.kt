@@ -17,7 +17,7 @@ class MockAssetTest {
         //MockAssest读取文件，该函数所得结果将来会作为模拟的网络数据返回，我们这个单元测试的意义
         //就是保证模拟的网络数据能够正确的返回
         val content = MockAssest.readFile(MockAssest.USER_DATA)
-        Observable.just(content)
+        Observable.just(content).subscribe(Co)
                 .test()
                 .assertValue("{\r\n" +
                         "    \"username\": \"wxg\",\r\n" +
