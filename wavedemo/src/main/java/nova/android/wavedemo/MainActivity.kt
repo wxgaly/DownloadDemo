@@ -10,6 +10,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
+        initData()
+    }
+
+    private fun initData() {
+        TestBitmap.testBitmap(resources)
     }
 
     private fun initView() {
