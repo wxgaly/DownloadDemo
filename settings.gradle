@@ -1,2 +1,2 @@
-//include ':app', ':constraintdemo', ':androidtester', ':notificationdemo', ':torrentdemo', ':slidingcarddemo'':wavedemo',':wavedemo2',
-include ':jobschedulerdemo'
+//include ':app', ':constraintdemo', ':androidtester', ':notificationdemo', ':torrentdemo', ':slidingcarddemo'':wavedemo',':wavedemo2',':jobschedulerdemo'
+include ':app'
