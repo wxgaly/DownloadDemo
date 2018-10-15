@@ -1,2 +1,3 @@
 //include ':app', ':constraintdemo', ':androidtester', ':notificationdemo', ':torrentdemo', ':slidingcarddemo'':wavedemo',':wavedemo2',
-include ':jobschedulerdemo'
+//':jobschedulerdemo'
+include ':app',  ':androidtester'

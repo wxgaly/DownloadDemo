@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -25,6 +26,9 @@ import wxgaly.android.downloaddemo.api.FileInfoGetter;
 import wxgaly.android.downloaddemo.bean.FileInfo;
 import wxgaly.android.downloaddemo.bean.IDownloadCallback;
 import wxgaly.android.downloaddemo.util.DownloadUtils;
+
+import static wxgaly.android.downloaddemo.view.CustomTextView.CUSTOM_FONT_ZAWGYI;
+import static wxgaly.android.downloaddemo.view.CustomTextView.TEXT_BURMA1;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String CUSTOM_FONT_SONGTI = "SimSun";
     public static final String CUSTOM_FONT_KAITI = "KaiTi";
 
+    private TextView tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +63,25 @@ public class MainActivity extends AppCompatActivity {
 //        testDownload();
 //        testFontHeight();
 //        testShell();
+        initView();
 
+    }
+
+    private void initView() {
+        tv = findViewById(R.id.tv_text);
+        try {
+            Typeface typeface = Typeface.createFromFile(CUSTOM_FONT_ZAWGYI);
+//            Typeface typeface = Typeface.create("Arial", Typeface.NORMAL);
+            tv.setTypeface(typeface);
+            tv.setText(TEXT_BURMA1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        Log.d(TAG, "tv.getLineHeight():" + tv.getLineHeight());
+
+//        for (int i = 97; i <= 122; i++) {
+//            Log.d(TAG, "initView: " + (char) i);
+//        }
     }
 
     private void testShell() {

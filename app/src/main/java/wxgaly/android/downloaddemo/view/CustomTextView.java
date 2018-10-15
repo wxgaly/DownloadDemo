@@ -31,13 +31,21 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     public static final String CUSTOM_FONT_XIHEI = "/sdcard/nova/viplex_terminal/font/STXIHEI.TTF";
     public static final String CUSTOM_FONT_KRUTI = "/sdcard/nova/viplex_terminal/font/Kruti_Dev.ttf";
     public static final String CUSTOM_FONT_WXG = "/sdcard/nova/viplex_terminal/font/wxgyh.TTF";
+    public static final String CUSTOM_FONT_ZIXIN = "/sdcard/nova/viplex_terminal/font/字心坊夏梦手书2.0版本.ttf";
+    public static final String CUSTOM_FONT_ZAWGYI = "/sdcard/nova/viplex_terminal/font/Zawgyi One.ttf";
     private static final String TAG = "wxg";
     private static final String TEXT = "丁  请输入文字";
-    private static final int TEXT_SIZE = 90;
+    private static final int TEXT_SIZE = 60;
     private static final String TEXT_INDIA = "请输入ஆனால் நான் hello world உன்னை புரிந்து கொள்ள முடியவில்லை దయచేసి " +
             "టెక్స్ట్ని నమోదు చేయండి知道吗 कृपया पाठ दर्ज करे ದಯವಿಟ್ಟು ಪಠ್ಯವನ್ನು ನಮೂದಿಸಿ";
     private static final String TEXT_ENGLISH = "This is my treasure, health is the first wealth in life.";
     private static final String TEXT_YINDI = "कृपया पाठ दर्ज करेंऐसा करने के लिए कई चीजें होंगी.";
+    public static final String TEXT_BURMA = "ဒါဟာစစ်မှန်တဲ့င်";
+    public static final String TEXT_BURMA1 = "Welcome to YangonYCD\n" +
+            "ရန္ကုန္ျမိဳ့ မွ ၾကိဳဆိုပါ၏ \n" +
+            "\n" +
+            "YCDC Shelters You\n" +
+            "မိုးတြင္းခ်ိန္ခါ နားခုိရာ";
     //    private static final char[] chars = TEXT.toCharArray();
     private static final int[] colors = new int[]{Color.RED, Color.BLUE, Color.GREEN, Color.GRAY,
             Color.CYAN, Color
@@ -88,7 +96,8 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     private void initPaint() {
         Paint paint = mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         try {
-            Typeface typeface = Typeface.createFromFile(CUSTOM_FONT_WXG);
+            Typeface typeface = Typeface.createFromFile(CUSTOM_FONT_ZAWGYI);
+//            Typeface typeface = Typeface.create("Microsoft YaHei", Typeface.NORMAL);
             paint.setTypeface(typeface);
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,17 +135,33 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
 
 
         Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
-//        Log.d(TAG, "ascent: " + fontMetrics.ascent);
-//        Log.d(TAG, "descent: " + fontMetrics.descent);
-//        Log.d(TAG, "bottom: " + fontMetrics.bottom);
-//        Log.d(TAG, "top: " + fontMetrics.top);
+        Log.d(TAG, "font size" + TEXT_SIZE);
+        Log.d(TAG, "ascent: " + fontMetrics.ascent);
+        Log.d(TAG, "descent: " + fontMetrics.descent);
+        Log.d(TAG, "bottom: " + fontMetrics.bottom);
+        Log.d(TAG, "top: " + fontMetrics.top);
+        Log.d(TAG, "leading: " + fontMetrics.leading);
         int baseLine = (int) ((getHeight() - fontMetrics.bottom - fontMetrics.top) / 2);
+//        Log.d(TAG, "baseLine: " + baseLine);
 
 //        canvas.drawRect(new Rect(0, 0, (int) measureText, (int) (fontMetrics.bottom -
 // fontMetrics.top)), mPaint);
 //        mPaint.setColor(Color.RED);
+//        float widthTxt = mPaint.measureText(" ");
+//        Log.d(TAG, "空格: " + widthTxt);
+//        widthTxt = mPaint.measureText("a");
+//        Log.d(TAG, "a: " + widthTxt);
+//        widthTxt = mPaint.measureText("z");
+//        Log.d(TAG, "z: " + widthTxt);
+//
+//        for (int i = 97; i <= 122; i++) {
+//            String str = String.valueOf((char) i);
+//
+//            Log.d(TAG, str + ": 宽: " + mPaint.measureText(str) + ": 高: " + (fontMetrics.descent - fontMetrics
+//                    .ascent + fontMetrics.leading));
+//        }
 
-        drawLineText(canvas, TEXT);
+        drawLineText(canvas, TEXT_BURMA);
 //        drawIndiaText(canvas, TEXT);
 
 //        canvas.drawText(TEXT, x, baseLine, mPaint);
@@ -169,7 +194,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
         Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
         float descent = fontMetrics.descent;
 
-        float baseLine = (getHeight() - fontMetrics.bottom - fontMetrics.top) / 2;
+        float baseLine = fontMetrics.bottom - fontMetrics.top - fontMetrics.leading;
         float ascent = fontMetrics.ascent;
         Log.d(TAG, "drawLineText: " + baseLine);
         Log.d(TAG, "ascent: " + ascent);
