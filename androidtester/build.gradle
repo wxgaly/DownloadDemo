@@ -41,6 +41,12 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+    lintOptions {
+        // 重新指定 Lint 规则配置文件
+        lintConfig file("default-lint.xml")
+    }
+
 }
 
 def coverageSourceDirs = [

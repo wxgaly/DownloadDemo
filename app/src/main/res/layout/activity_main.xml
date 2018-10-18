@@ -7,7 +7,6 @@
                                              android:background="@android:color/black">
 
     <wxgaly.android.downloaddemo.view.CustomTextView
-        android:id="@+id/customTextView"
         android:layout_width="800dp"
         android:layout_height="78dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -30,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/customTextView"/>
+        />
     <!--<wxgaly.android.downloaddemo.view.ColorfulSurfaceView
         android:layout_width="300dp"
         android:layout_height="200dp"

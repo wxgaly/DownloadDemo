@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,7 +67,33 @@ public class MainActivity extends AppCompatActivity {
 //        testFontHeight();
 //        testShell();
         initView();
+        testLint();
 
+    }
+
+    private void testLint() {
+        File srcfile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "1.mp4");
+        File desfile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "2.mp4");
+        FileInputStream fis;
+        FileOutputStream fos;
+        System.out.println(srcfile.getAbsolutePath());
+        try {
+            fis = new FileInputStream(srcfile);
+            fos = new FileOutputStream(desfile);
+
+            byte[] buffer = new byte[1024 * 1024 * 2];
+            long len = 0;
+            int redLen = 0;
+
+            while ((redLen = fis.read(buffer)) != -1) {
+                fos.write(buffer, 0, redLen);
+                len += redLen;
+            }
+            fos.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initView() {
@@ -107,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             String content = "";
 
             // 读取ping的内容，可不加。
-            DataOutputStream  os = new DataOutputStream(p.getOutputStream());
+            DataOutputStream os = new DataOutputStream(p.getOutputStream());
 
             os.write("echo AT+CRESET > /dev/ttyUSB2".getBytes());
             os.writeBytes("\n");
