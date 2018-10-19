@@ -27,13 +27,13 @@ import static nova.android.lintjarlib.NovaCategory.CODING_CONVENTION;
  */
 public class NovaBasicDetector extends Detector {
 
-    public static String LOG_ISSUE_ID = "LogUsage";
-    public static String OUT_ISSUE_ID = "OutUsage";
+    static String LOG_ISSUE_ID = "LogUsage";
+    static String OUT_ISSUE_ID = "OutUsage";
 
-    public static String DEFAULT_BRIEF_DESCRIPTION = "NovaIssue, 注意报错，保证代码质量";
-    public static String DEFAULT_EXPLANATION = "NovaIssue, 注意报错，保证代码质量";
-    public static int DEFAULT_PRIORITY = 5;
-    public static Severity DEFAULT_SEVERITY = Severity.WARNING;
+    private static String DEFAULT_BRIEF_DESCRIPTION = "NovaIssue, 注意报错，保证代码质量";
+    private static String DEFAULT_EXPLANATION = "NovaIssue, 注意报错，保证代码质量";
+    private static int DEFAULT_PRIORITY = 5;
+    private static Severity DEFAULT_SEVERITY = Severity.WARNING;
 
     public static final Issue BASIC_ISSUE = Issue.create(
             "NovaBasicIssue",
