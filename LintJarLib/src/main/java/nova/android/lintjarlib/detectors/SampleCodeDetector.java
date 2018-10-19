@@ -1,15 +1,12 @@
-package wxgaly.android.lintlib;
+package nova.android.lintjarlib.detectors;
 
 import com.android.tools.lint.client.api.UElementHandler;
-import com.android.tools.lint.detector.api.Category;
-import com.android.tools.lint.detector.api.Detector;
 import com.android.tools.lint.detector.api.Detector.UastScanner;
 import com.android.tools.lint.detector.api.Implementation;
 import com.android.tools.lint.detector.api.Issue;
 import com.android.tools.lint.detector.api.JavaContext;
 import com.android.tools.lint.detector.api.Scope;
 import com.android.tools.lint.detector.api.Severity;
-
 
 import org.jetbrains.uast.UElement;
 import org.jetbrains.uast.ULiteralExpression;
@@ -18,13 +15,15 @@ import org.jetbrains.uast.UastLiteralUtils;
 import java.util.Collections;
 import java.util.List;
 
+import static nova.android.lintjarlib.NovaCategory.CODING_CONVENTION;
+
 /**
- * wxgaly.android.lintlib.
+ * nova.android.lintlib.
  *
  * @author Created by WXG on 2018/10/17 017 18:20.
  * @version V1.0
  */
-public class SampleCodeDetector extends Detector implements UastScanner {
+public class SampleCodeDetector extends NovaBasicDetector implements UastScanner {
     /** Issue describing the problem and pointing to the detector implementation */
     public static final Issue ISSUE = Issue.create(
             // ID: used in @SuppressLint warnings etc
@@ -40,7 +39,7 @@ public class SampleCodeDetector extends Detector implements UastScanner {
                     "the word `lint`. Blah blah blah.\n" +
                     "\n" +
                     "Another paragraph here.\n",
-            Category.CORRECTNESS,
+            CODING_CONVENTION,
             6,
             Severity.WARNING,
             new Implementation(
@@ -66,7 +65,7 @@ public class SampleCodeDetector extends Detector implements UastScanner {
             @Override
             public void visitLiteralExpression(ULiteralExpression expression) {
                 String string = UastLiteralUtils.getValueIfStringLiteral(expression);
-                System.out.println("====================================string : " + string);
+
                 if (string == null) {
                     return;
                 }

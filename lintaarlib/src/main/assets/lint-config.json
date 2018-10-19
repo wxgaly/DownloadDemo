@@ -1,0 +1,54 @@
+{
+  "lintRules": {
+    "deprecatedApi": [
+      {
+        "id": "OutUsage",
+        "className": "java.io.PrintStream",
+        "methods": [
+          "println"
+        ],
+        "message": "请勿直接使用System.out，应该使用Logger",
+        "priority": 6,
+        "severity": "Error"
+      },
+      {
+        "id": "LogUsage",
+        "className": "android.util.Log",
+        "methods": [
+          "v",
+          "d",
+          "i",
+          "w",
+          "e",
+          "wtf"
+        ],
+        "message": "请勿直接使用Log，应该使用Logger",
+        "priority": 6,
+        "severity": "Error"
+      },
+      {
+        "id": "NewThread",
+        "className": "java.lang.Thread",
+        "methods": [
+          "Thread"
+        ],
+        "message": "避免单独创建Thread执行后台任务，存在性能问题，建议使用ThreadPool，并建议使用构造方法，不建议使用Executors",
+        "priority": 5,
+        "severity": "Warning"
+      }
+    ],
+    "handleException": [
+      {
+        "id": "ColorException",
+        "className": "android.graphics.Color",
+        "methods": [
+          "parseColor"
+        ],
+        "exception": "java.lang.IllegalArgumentException",
+        "message": "Color.parseColor需要加try-catch处理IllegalArgumentException异常",
+        "priority": 8,
+        "severity": "Error"
+      }
+    ]
+  }
+}
