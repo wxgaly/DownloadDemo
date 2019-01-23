@@ -5,19 +5,25 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 
-public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
+public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, View.OnClickListener {
 
     private static final int KEY_PREPARE = 2020;
+    private static final String PATH = "test.mp4";
 
     private SurfaceView mSurfaceView;
     private MediaPlayer mMediaPlayer;
     private SurfaceHolder mHolder;
+    private EditText mEditTextVideoPath;
+    private Button mBtnStartPlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        mMediaPlayer.setDisplay(holder);
+
     }
 
     @Override
@@ -44,25 +50,60 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     private void initView() {
         mSurfaceView = findViewById(R.id.surfaceView);
+        mEditTextVideoPath = findViewById(R.id.et_path);
+        mBtnStartPlay = findViewById(R.id.btn_start);
+
+        mBtnStartPlay.setOnClickListener(this);
     }
 
     private void initData() {
 
         try {
-
-            mMediaPlayer = new MediaPlayer();
-            AssetFileDescriptor afd = getAssets().openFd("test.mp4");
-            mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-
-
             mHolder = mSurfaceView.getHolder();
             mHolder.addCallback(MainActivity.this);
 
-            mMediaPlayer.prepareAsync();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.btn_start:
+                startPlay();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void startPlay() {
+        try {
+            if (mMediaPlayer != null) {
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.stop();
+                    mMediaPlayer.release();
+                }
+            }
+
+            mMediaPlayer = new MediaPlayer();
+            mMediaPlayer.setDisplay(mHolder);
             mMediaPlayer.setOnPreparedListener(new MediaPlayerPreparedListener());
             mMediaPlayer.setOnInfoListener(new MediaPlayerInfoListener());
 
-        } catch (IOException e) {
+            String path = mEditTextVideoPath.getText().toString();
+            if (TextUtils.isEmpty(path)) {
+                AssetFileDescriptor afd = getAssets().openFd(PATH);
+                mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            } else {
+                mMediaPlayer.setDataSource(path);
+            }
+
+            mMediaPlayer.prepareAsync();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
