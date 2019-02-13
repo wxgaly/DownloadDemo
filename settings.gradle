@@ -1,3 +1,3 @@
 //include ':app', ':constraintdemo', ':androidtester', ':notificationdemo', ':torrentdemo', ':slidingcarddemo'':wavedemo',':wavedemo2',
 //':jobschedulerdemo' ':androidtester',
-include ':app',   ':lintlib', ':lintaarlib', ':LintJarLib', ':playvideodemo', ':vlcdemo'
+include ':app',   ':lintlib', ':lintaarlib', ':LintJarLib', ':playvideodemo', ':vlcdemo', ':audiotrackdemo'
